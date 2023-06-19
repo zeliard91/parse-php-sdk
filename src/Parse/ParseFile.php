@@ -95,11 +95,15 @@ class ParseFile implements Encodable
         if (!$this->url) {
             throw new ParseException('Cannot delete file that has not been saved.', 151);
         }
+        $sessionToken = null;
+        if (ParseUser::getCurrentUser()) {
+            $sessionToken = ParseUser::getCurrentUser()->getSessionToken();
+        }
 
         ParseClient::_request(
             'DELETE',
             'files/'.$this->getName(),
-            null,
+            $sessionToken,
             null,
             $useMasterKey
         );
@@ -222,11 +226,15 @@ class ParseFile implements Encodable
         $fileParts = explode('.', $this->getName());
         $extension = array_pop($fileParts);
         $mimeType = $this->mimeType ?: $this->getMimeTypeForExtension($extension);
+        $sessionToken = null;
+        if (ParseUser::getCurrentUser()) {
+            $sessionToken = ParseUser::getCurrentUser()->getSessionToken();
+        }
 
         return ParseClient::_request(
             'POST',
             'files/'.$this->getName(),
-            null,
+            $sessionToken,
             $this->getData(),
             $useMasterKey,
             $mimeType
