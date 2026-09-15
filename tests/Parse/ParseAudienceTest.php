@@ -101,7 +101,15 @@ class ParseAudienceTest extends TestCase
             'audience_id'   => $audience->getObjectId()
         ], true);
 
-        $audience->fetch(true);
+        // Parse Server updates the audience counters without waiting for that
+        // write to resolve, so poll until they show up rather than racing it.
+        for ($attempt = 0; $attempt < 50; $attempt++) {
+            $audience->fetch(true);
+            if ($audience->getTimesUsed() !== null) {
+                break;
+            }
+            usleep(100000);
+        }
 
         $this->assertEquals(1, $audience->getTimesUsed());
         $this->assertNotNull($audience->getLastUsed());
