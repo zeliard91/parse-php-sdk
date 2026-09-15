@@ -109,6 +109,7 @@ grab the phar first (and run it with PHP 8.4 or older):
     mkdir -p tools
     curl -sSL -o tools/phpDocumentor.phar \
       https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.10.0/phpDocumentor.phar
+    echo "fe1e7c23ba3329aa6f19ac3c807446159a431a195ec5d9163b0c281a15105207  tools/phpDocumentor.phar" | sha256sum --check --strict
     chmod +x tools/phpDocumentor.phar
     npm run document-check
 
