@@ -105,7 +105,7 @@ class ParseAudienceTest extends TestCase
         // write to resolve, so poll until they show up rather than racing it.
         for ($attempt = 0; $attempt < 50; $attempt++) {
             $audience->fetch(true);
-            if ($audience->getTimesUsed() !== null) {
+            if ($audience->getTimesUsed() === 1) {
                 break;
             }
             usleep(100000);

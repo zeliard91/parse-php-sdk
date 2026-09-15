@@ -86,7 +86,7 @@ class Helper
      */
     public static function getHttpServerURL()
     {
-        return 'http://localhost:'.(getenv('PARSE_TEST_HTTP_PORT') ?: '1337');
+        return 'http://localhost:'.self::getPort('PARSE_TEST_HTTP_PORT', 1337);
     }
 
     /**
@@ -98,7 +98,35 @@ class Helper
      */
     public static function getHttpsServerURL()
     {
-        return 'https://localhost:'.(getenv('PARSE_TEST_HTTPS_PORT') ?: '1338');
+        return 'https://localhost:'.self::getPort('PARSE_TEST_HTTPS_PORT', 1338);
+    }
+
+    /**
+     * Reads a port from the environment, applying the same validation as
+     * tests/server.js so both ends always agree on the port in use.
+     *
+     * @param string $variable  Name of the environment variable to read
+     * @param int    $default   Port to use when the variable is not set
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return int
+     */
+    private static function getPort($variable, $default)
+    {
+        $port = getenv($variable);
+
+        if ($port === false || $port === '') {
+            return $default;
+        }
+
+        if (!ctype_digit($port) || (int) $port < 1 || (int) $port > 65535) {
+            throw new \InvalidArgumentException(
+                $variable.' must be an integer between 1 and 65535, got "'.$port.'"'
+            );
+        }
+
+        return (int) $port;
     }
 
     public static function tearDown()

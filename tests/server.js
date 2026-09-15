@@ -7,9 +7,26 @@ import emailAdapter from './MockEmailAdapter.js';
 const app = express();
 const __dirname = path.resolve();
 
-// Ports and database can be overridden to avoid clashing with a local Parse stack
-const httpPort  = parseInt(process.env.PARSE_TEST_HTTP_PORT  || '1337', 10);
-const httpsPort = parseInt(process.env.PARSE_TEST_HTTPS_PORT || process.env.PORT || '1338', 10);
+// Ports and database can be overridden to avoid clashing with a local Parse stack.
+// The PHP test suite resolves these ports the same way, so an ephemeral port (0)
+// is rejected rather than silently disagreeing with the client.
+function resolvePort(name, value, fallback) {
+  if (value === undefined || value === '') {
+    return fallback;
+  }
+  const port = Number(value);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+    throw new Error(`${name} must be an integer between 1 and 65535, got "${value}"`);
+  }
+  return port;
+}
+
+const httpPort = resolvePort('PARSE_TEST_HTTP_PORT', process.env.PARSE_TEST_HTTP_PORT, 1337);
+const httpsPort = resolvePort(
+  'PARSE_TEST_HTTPS_PORT',
+  process.env.PARSE_TEST_HTTPS_PORT ?? process.env.PORT,
+  1338
+);
 const databaseURI = process.env.PARSE_TEST_DATABASE_URI || 'mongodb://localhost/test';
 
 const server = new ParseServer({
