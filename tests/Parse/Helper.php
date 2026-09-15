@@ -73,7 +73,32 @@ class Helper
 
     public static function setServerURL()
     {
-        ParseClient::setServerURL('http://localhost:1337', 'parse');
+        ParseClient::setServerURL(self::getHttpServerURL(), 'parse');
+    }
+
+    /**
+     * Base url of the plain http test server.
+     *
+     * The port may be overridden with PARSE_TEST_HTTP_PORT to avoid
+     * clashing with another Parse server running locally.
+     *
+     * @return string
+     */
+    public static function getHttpServerURL()
+    {
+        return 'http://localhost:'.(getenv('PARSE_TEST_HTTP_PORT') ?: '1337');
+    }
+
+    /**
+     * Base url of the TLS enabled test server.
+     *
+     * The port may be overridden with PARSE_TEST_HTTPS_PORT.
+     *
+     * @return string
+     */
+    public static function getHttpsServerURL()
+    {
+        return 'https://localhost:'.(getenv('PARSE_TEST_HTTPS_PORT') ?: '1338');
     }
 
     public static function tearDown()

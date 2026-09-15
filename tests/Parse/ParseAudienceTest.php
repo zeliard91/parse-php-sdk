@@ -8,6 +8,7 @@ use Parse\ParseObject;
 use Parse\ParsePush;
 use Parse\ParseQuery;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 class ParseAudienceTest extends TestCase
@@ -38,9 +39,7 @@ class ParseAudienceTest extends TestCase
         ]);
     }
 
-    /**
-     * @group audience-tests
-     */
+    #[Group('audience-tests')]
     public function testPushAudiences()
     {
         $this->createInstallations();
@@ -65,9 +64,7 @@ class ParseAudienceTest extends TestCase
         $this->assertEquals(0, $audience->getTimesUsed());
     }
 
-    /**
-     * @group audience-tests
-     */
+    #[Group('audience-tests')]
     public function testSaveWithoutMaster()
     {
         $query = ParseAudience::query();
@@ -84,9 +81,7 @@ class ParseAudienceTest extends TestCase
         $this->assertEquals(1, $query->count(true), 'Did not end at 1');
     }
 
-    /**
-     * @group audience-tests
-     */
+    #[Group('audience-tests')]
     public function testPushWithAudience()
     {
         $this->createInstallations();

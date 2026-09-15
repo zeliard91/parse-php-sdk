@@ -7,14 +7,19 @@ import emailAdapter from './MockEmailAdapter.js';
 const app = express();
 const __dirname = path.resolve();
 
+// Ports and database can be overridden to avoid clashing with a local Parse stack
+const httpPort  = parseInt(process.env.PARSE_TEST_HTTP_PORT  || '1337', 10);
+const httpsPort = parseInt(process.env.PARSE_TEST_HTTPS_PORT || process.env.PORT || '1338', 10);
+const databaseURI = process.env.PARSE_TEST_DATABASE_URI || 'mongodb://localhost/test';
+
 const server = new ParseServer({
   appName: "MyTestApp",
   appId: "app-id-here",
   masterKey: "master-key-here",
   restKey: "rest-api-key-here",
-  databaseURI: "mongodb://localhost/test",
+  databaseURI: databaseURI,
   cloud: __dirname + "/tests/cloud-code.js",
-  publicServerURL: "http://localhost:1337/parse",
+  publicServerURL: `http://localhost:${httpPort}/parse`,
   logsFolder: path.resolve(process.cwd(), 'logs'),
   verbose: true,
   silent: true,
@@ -53,13 +58,12 @@ await server.start();
 // Serve the Parse API on the /parse URL prefix
 app.use('/parse', server.app);
 
-const port = 1337;
-app.listen(port, function() {
-  console.error('[ Parse Test Http Server running on port ' + port + ' ]');
+app.listen(httpPort, function() {
+  console.error('[ Parse Test Http Server running on port ' + httpPort + ' ]');
 });
 
 const options = {
-  port:       process.env.PORT       || 1338,
+  port:       httpsPort,
   server_key: process.env.SERVER_KEY || __dirname + '/tests/keys/localhost.key',
   server_crt: process.env.SERVER_CRT || __dirname + '/tests/keys/localhost.crt',
   server_fp:  process.env.SERVER_FP  || __dirname + '/tests/keys/localhost.fp',
