@@ -7,6 +7,9 @@ on:
   pull_request:
     branches:
       - "**"
+# Every job only reads the repository; codecov is uploaded with its own token.
+permissions:
+  contents: read
 jobs:
   check-lock-file-version:
     name: NPM Lock File Version
