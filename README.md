@@ -2,6 +2,9 @@
 
 ---
 
+> [!NOTE]
+> This is a fork of [parse-community/parse-php-sdk](https://github.com/parse-community/parse-php-sdk) published as `zeliard91/parse-php-sdk`, adding PHP 8.4 and 8.5 support ([upstream PR #528](https://github.com/parse-community/parse-php-sdk/pull/528)). It replaces `parse/php-sdk`, so the `Parse\` namespace is unchanged: `composer require zeliard91/parse-php-sdk`.
+
 [![Build Status CI release](https://github.com/parse-community/parse-php-sdk/workflows/ci/badge.svg?branch=master)](https://github.com/parse-community/parse-php-sdk/actions?query=workflow%3Aci+branch%3Amaster)
 [![Snyk Badge](https://snyk.io/test/github/parse-community/parse-php-sdk/badge.svg)](https://snyk.io/test/github/parse-community/parse-php-sdk)
 [![Coverage](http://codecov.io/github/parse-community/parse-php-sdk/coverage.svg?branch=master)](http://codecov.io/github/parse-community/parse-php-sdk?branch=master)
